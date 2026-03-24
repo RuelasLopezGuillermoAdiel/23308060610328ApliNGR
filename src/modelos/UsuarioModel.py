@@ -19,9 +19,17 @@ class UsuarioModel:
             )
             conn.commit()
             return True
-    except Exception as e:
-    return False
-finally:
-   conn.Close()
-def validar_login(self, email, password):
-    conn = self.db.get_connection()
+        except Exception as e:
+            print(f"Error: (e)")
+            return False
+        finally:
+            conn.Close()
+    def validar_login(self, email, password):
+        conn = self.db.get_connection()
+        cursor = conn.cursor(dictionary-True)
+        cursor.execute("SELECT * FROM usuario WHERE email=%5", (email))
+        user = cursor.fetchone()
+        conn.close()
+        if user and bctypy.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            return user 
+        return None
