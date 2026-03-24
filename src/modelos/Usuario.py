@@ -20,3 +20,8 @@ class UsuarioModel:
             conn.commit()
             return True
     except Exception as e:
+    return False
+finally:
+   conn.Close()
+def validar_login(self, email, password):
+    conn = self.db.get_connection()
