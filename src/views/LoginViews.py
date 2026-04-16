@@ -26,3 +26,4 @@ def LoginView(pago, auth_controller):
             
         ], horizontal_alignment=ft.CrossAxisAlignnment.CENTER, alignment=ft.MainAxisAlignment.CENTER)
     ])
+    
