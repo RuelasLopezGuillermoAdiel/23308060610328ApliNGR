@@ -44,6 +44,12 @@ def LoginView(page: ft.Page, auth_controller):
         bgcolor="blue",
         color="white"
     )
+    registrar = ft.ElevatedButton(
+        "Crear una cuenta nueva",
+        bgcolor = "blue",
+        color = "white", 
+        on_click = lambda _: page.go("/registro")
+    )
 
     # Permitir entrar al presionar "Enter" en la contraseña
     pass_input.on_submit = login_click
@@ -64,8 +70,9 @@ def LoginView(page: ft.Page, auth_controller):
                     email_input,
                     pass_input,
                     login_button,
+                    registrar,
                     ft.TextButton(
-                        "Crear una cuenta nueva",
+                        "¿Olvidaste la contraseña?",
                         on_click=lambda _: page.go("/registro")
                     )
                 ],
