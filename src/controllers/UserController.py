@@ -9,10 +9,26 @@ class AuthController:
         
     def registrar_usuario(self, nombre, email, password):
         try:
-            
             nuevo_usuario = UsuarioSchema(nombre=nombre, email=email, password=password)
             success = self.model.registrar(nuevo_usuario)
             return success, "Usuario creado correctamente"
         except ValidationError as e:
             
             return False, e.errors()[0]['msg']
+        
+lef login (self, email, password):
+    try:
+        
+        Usuario_login = UsuarioLogin(email = email, password = pasword 
+        if usuario_login:
+            success= self.model.iniciar_sesion(usuario_login)
+            if success:
+                return True, "Inicio de sesion exitoso"
+            else:
+                return False, "Credenciales incorrectas"
+        else:
+            return False, "Datos de inicio de sesion no validos"
+    except ValidationError as e:
+        
+        
+
