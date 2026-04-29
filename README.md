@@ -27,3 +27,66 @@ def LoginView(pago, auth_controller):
     
 
     AGREGAR .env
+
+
+
+
+
+#user model 
+        
+        
+    def registrar(self, usuario_data):
+        #encriptar contraseña
+        salt = bcrypt.gensalt()
+        hashed_pw = bcrypt.hashpw(usuario_data.password.encode('utf-8'), salt)
+        
+        conn = self.db.get_connection()
+        cursor = conn.cursors()
+        try:
+            cursor.execute(
+                "INSET INTO usuario (nombre, email, password) VALUES (%5, %5, %5)",
+                (usuario_data.nombre, usuario_data.email, hashed_pw.decode('utf-8'))
+            )
+            conn.commit()
+            return True
+        except Exception as e:
+            print(f"Error: (e)")
+            return False
+        finally:
+            conn.Close()
+            
+    def validar_login(self, email, password):
+        conn = self.db.get_connection()
+        cursor = conn.cursor(dictionary-True)
+        cursor.execute("SELECT * FROM usuario WHERE email=%5", (email))
+        user = cursor.fetchone()
+        conn.close()
+        
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            return user 
+        return None
+
+
+#Databasemodel
+
+import mysql.connector
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Database:
+    @staticmethod
+    def get_connection():
+        try:
+            connection = mysql.connector.connect(
+                host=os.getenv("DB_HOST"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                database=os.getenv("DB_NAME")
+            )
+        
+            if connection.is_connected():
+                return connection
+            
+            except mysql.connector.Error as err:

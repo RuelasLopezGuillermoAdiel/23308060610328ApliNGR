@@ -19,7 +19,7 @@ class AuthController:
 lef login (self, email, password):
     try:
         
-        Usuario_login = UsuarioLogin(email = email, password = pasword 
+        Usuario_login = UsuarioLogin(email = email, password = pasword)
         if usuario_login:
             success= self.model.iniciar_sesion(usuario_login)
             if success:
