@@ -5,9 +5,10 @@ def LoginView(page: ft.Page, auth_controller):
     correo = ft.TextField(
         label="Correo electrónico",
         prefix_icon=ft.Icons.PERSON,
-        width=400,
-        border_radius=10,
-        keyboard_type=ft.KeyboardType.EMAIL
+        width=500,
+        border_radius=5,
+        keyboard_type=ft.KeyboardType.EMAIL,
+        color= blue_900
     )
 
     contraseña = ft.TextField(
@@ -15,8 +16,9 @@ def LoginView(page: ft.Page, auth_controller):
         prefix_icon=ft.Icons.KEY,
         password=True,
         can_reveal_password=True,
-        width=400,
-        border_radius=10
+        width=500,
+        border_radius=5,
+        color=green
     )
     
     mensaje = ft.Text("", color="red")
