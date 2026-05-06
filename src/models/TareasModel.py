@@ -13,16 +13,16 @@ class TareaModel:
         conn.close()
         return resultado
     
-def crear(self, id_usuario, titulo, descripcion, prioridad, clasificacion):
-    conn = self.db.get_connection()
-    cursor = conn.cursor()
-    query = """INSERT INTO tareas (id_usuario, titulo, descripcion, prioridad, clasificacion)
-    VALUES (%5, %5, %5, %5, %5)"""
-    cursor.execute(query, (id_usuario, titulo, descripcion, prioridad, clasificacion))
-    conn.commit()
-    conn.close()
+    def crear(self, id_usuario, titulo, descripcion, prioridad, clasificacion):
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        query = """INSERT INTO tareas (id_usuario, titulo, descripcion, prioridad, clasificacion)
+        VALUES (%5, %5, %5, %5, %5)"""
+        cursor.execute(query, (id_usuario, titulo, descripcion, prioridad, clasificacion))
+        conn.commit()
+        conn.close()
 
-  def eliminar(self, id_tarea):
+    def eliminar(self, id_tarea):
         conn = self.db.get_connection()
         cursor = conn.cursor()
         query = "DELETE FROM tareas WHERE id_tarea = %s"
