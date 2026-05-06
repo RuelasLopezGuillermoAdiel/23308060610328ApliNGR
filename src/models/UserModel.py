@@ -1,9 +1,10 @@
 import bcrypt
-from .databaseModel import Database 
+from .databaseModel import Database
+
 class UsuarioModel:
     def __init__(self):
         self.db = Database()
-        
+    
     def email_existe(self, email):
         conn = self.db.get_connection()
         cursor = conn.cursor()
@@ -41,8 +42,21 @@ class UsuarioModel:
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
             return user
         return None
+    
+    def actualizar_ultimo_acceso(self, id_usuario):
+        conn = self.db.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE usuarios SET ultimo_acceso = NOW() WHERE id_usuario = %s",
+            (id_usuario,)
+        )
+        conn.commit()
+        conn.close()
         
-    def iniciar_session(self, usuario_data):
-        
-        
-        
+    def obtener_por_id(self, id_usuario):
+        conn = self.db.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM usuarios WHERE id_usuario = %s", (id_usuario,))
+        user = cursor.fetchone()
+        conn.close()
+        return user
