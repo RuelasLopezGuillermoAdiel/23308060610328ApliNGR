@@ -1,59 +1,70 @@
 import flet as ft
 
 def LoginView(page: ft.Page, auth_controller):
-    # Campos de entrada
-    email_input = ft.TextField(
+    
+    correo = ft.TextField(
         label="Correo electrónico",
-        width=350,
-        border_radius=5,
+        prefix_icon=ft.Icons.PERSON,
+        width=400,
+        border_radius=10,
         keyboard_type=ft.KeyboardType.EMAIL
     )
-    
-    pass_input = ft.TextField(
+
+    contraseña = ft.TextField(
         label="Contraseña",
+        prefix_icon=ft.Icons.KEY,
         password=True,
         can_reveal_password=True,
-        width=350,
-        border_radius=5
+        width=400,
+        border_radius=10
     )
+    
+    mensaje = ft.Text("", color="red")
+
+    def mostrar_snackbar(mensaje_texto, color=ft.Colors.GREEN):
+        page.snack_bar = ft.SnackBar(
+            content=ft.Text(mensaje_texto),
+            bgcolor=color,
+            duration=2000,
+        )
+        page.snack_bar.open = True
+        page.update()
 
     def login_click(e):
-        # Validación de campos vacíos
-        if not email_input.value or not pass_input.value:
-            page.snack_bar = ft.SnackBar(ft.Text("Por favor, llene todos los campos"))
-            page.snack_bar.open = True
+        if not correo.value or not contraseña.value:
+            mensaje.value = "Por favor, llene todos los campos"
+            mensaje.color = "red"
             page.update()
             return
-
-        # Llamada al controlador
-        user, msg = auth_controller.login(email_input.value, pass_input.value)
-
+        
+        user, msg = auth_controller.login(correo.value, contraseña.value)
         if user:
-            page.session.set("user", user)
+            page.user_data = user
+            mostrar_snackbar("¡Sesión iniciada correctamente!", ft.Colors.GREEN)
             page.go("/dashboard")
         else:
-            page.snack_bar = ft.SnackBar(ft.Text(msg))
-            page.snack_bar.open = True
+            mensaje.value = msg
+            mensaje.color = "red"
             page.update()
 
-    # Botón de entrada
-    login_button = ft.ElevatedButton(
-        "Entrar",
+    iniciar_sesion = ft.ElevatedButton(
+        "Iniciar sesión",
+        width=250,
         on_click=login_click,
-        width= 300,
-        bgcolor="green",
-        color="white"
+        style=ft.ButtonStyle(
+            bgcolor=ft.Colors.BLUE_500,
+            color=ft.Colors.WHITE,
+            padding=20,
+            shape=ft.RoundedRectangleBorder(radius=12),
+        ),
     )
-    registrar = ft.ElevatedButton(
-        "Crear una cuenta nueva",
-        width=300,
-        bgcolor = "orange",
-        color = "white", 
-        on_click = lambda _: page.go("/registro")
+    
+    btn_registro = ft.TextButton(
+        "¿No tienes cuenta? Regístrate",
+        on_click=lambda _: page.go("/register")
     )
-
-    # Permitir entrar al presionar "Enter" en la contraseña
-    pass_input.on_submit = login_click
+    
+    contraseña.on_submit = login_click
 
     return ft.View(
         route="/",
@@ -61,25 +72,30 @@ def LoginView(page: ft.Page, auth_controller):
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         appbar=ft.AppBar(
             title=ft.Text("SIGE - Login"),
-            bgcolor="bluegrey900",
-            color="white"
+            bgcolor=ft.Colors.BLACK,
+            color=ft.Colors.WHITE
         ),
         controls=[
             ft.Column(
                 [
                     ft.Text("Acceso al Sistema", size=24, weight="bold"),
-                    email_input,
-                    pass_input,
-                    login_button,
-                    registrar,
-                    ft.TextButton(
-                        "¿Olvidaste la contraseña?",
-                        on_click=lambda _: page.go("/registro")
-                    )
+                    ft.Container(height=10),
+                    correo,
+                    ft.Container(height=10),
+                    contraseña,
+                    ft.Container(height=10),
+                    mensaje,
+                    ft.Container(height=10),
+                    ft.Row(
+                        [iniciar_sesion],
+                        alignment=ft.MainAxisAlignment.CENTER
+                    ),
+                    ft.Container(height=10),
+                    btn_registro
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 tight=True,
-                spacing=20
+                spacing=10
             )
         ]
     )
