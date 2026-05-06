@@ -1,34 +1,47 @@
-from models.UserModel import UsuarioModel
-from models.schemasModel import UsuarioSchema
-from pydantic import ValidationError
-
+from models.UsuariosModel import UsuarioModel
 
 class AuthController:
     def __init__(self):
-        self.model = UsuarioModel()
-        
-    def registrar_usuario(self, nombre, email, password):
+        self.usuario_model = UsuarioModel()
+
+    def login(self, email, password):
         try:
-            nuevo_usuario = UsuarioSchema(nombre=nombre, email=email, password=password)
-            success = self.model.registrar(nuevo_usuario)
-            return success, "Usuario creado correctamente"
-        except ValidationError as e:
+            user_db = self.usuario_model.validar_login(email, password)
+
+            if not user_db:
+                return None, "Correo o contraseña incorrectos"
+
+            self.usuario_model.actualizar_ultimo_acceso(user_db["id_usuario"])
+        
+            user_db_actualizado = self.usuario_model.obtener_por_id(user_db["id_usuario"])
+
+            user = {
+                "id_usuario": user_db_actualizado["id_usuario"],
+                "nombre": user_db_actualizado["nombre"],
+                "apellido": user_db_actualizado["apellido"],
+                "email": user_db_actualizado["email"],
+                "fecha_registro": user_db_actualizado["fecha_registro"],
+                "ultimo_acceso": user_db_actualizado["ultimo_acceso"],  
+        }
+
+            return user, "Login exitoso"
+        
+        except Exception as e:
+            return None, f"Error en login: {str(e)}"
+    
+    def registrar(self, usuario_data):
+        try:
+            if self.usuario_model.email_existe(usuario_data.email):
+                return False, "El correo electrónico ya está registrado"
+            exito = self.usuario_model.registrar(usuario_data)
             
-            return False, e.errors()[0]['msg']
-        
-lef login (self, email, password):
-    try:
-        
-        Usuario_login = UsuarioLogin(email = email, password = pasword)
-        if usuario_login:
-            success= self.model.iniciar_sesion(usuario_login)
-            if success:
-                return True, "Inicio de sesion exitoso"
+            if exito:
+                return True, "Usuario registrado exitosamente"
             else:
-                return False, "Credenciales incorrectas"
-        else:
-            return False, "Datos de inicio de sesion no validos"
-    except ValidationError as e:
+                return False, "Error al registrar usuario"
+                
+        except Exception as e:
+            return False, f"Error en registro: {str(e)}"
         
         
 
