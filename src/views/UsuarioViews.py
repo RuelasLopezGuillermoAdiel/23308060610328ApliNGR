@@ -3,7 +3,7 @@ import flet as ft
 def UserView(page, auth_controller):
     page.title = "Perfil"
     
-    # 🎨 FONDO GENERAL
+    
     page.bgcolor = "#0f172a"
     page.theme_mode = ft.ThemeMode.DARK
     
@@ -43,7 +43,7 @@ def UserView(page, auth_controller):
                 ], expand=True),
                 padding=20,
                 expand=True,
-                bgcolor="#1e293b"  # 🎨 fondo del contenedor
+                bgcolor="#1e293b" 
             ),
         ]
     )
