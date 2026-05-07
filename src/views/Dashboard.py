@@ -4,7 +4,7 @@ from datetime import datetime
 def DashboardView(page, tarea_controller):
     user = getattr(page, "user_data", None)
 
-    # 🎨 TEMA GENERAL
+   
     page.bgcolor = "#0b1120"
     page.theme_mode = ft.ThemeMode.DARK
 
@@ -32,7 +32,7 @@ def DashboardView(page, tarea_controller):
         hora_limite.open = True
         page.update()
 
-    # 🎨 ESTILO BOTONES
+    
     estilo_btn = ft.ButtonStyle(
         shape=ft.RoundedRectangleBorder(radius=12),
         padding=20,
@@ -200,7 +200,7 @@ def DashboardView(page, tarea_controller):
 
             page.update()
 
-    # 🎨 INPUTS MODERNOS
+    
     txt_titulo = ft.TextField(
         label="Título",
         expand=True,
